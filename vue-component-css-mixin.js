@@ -11,10 +11,8 @@ VueComponentCSSMixin = {
         if (!dict.hasOwnProperty(countKey)) dict[countKey] = 0
         dict[countKey]++
 
-        const styleTag = document.createElement("style")
-
-        if (self.css) {
-          if (dict.hasOwnProperty(tagKey)) return
+        if (self.css && !dict.hasOwnProperty(tagKey)) {
+          const styleTag = document.createElement("style")
           dict[tagKey] = styleTag
           styleTag.innerHTML = self.css
           document.head.appendChild(styleTag)

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title></title>
+  </head>
+  <body>
+    <div id="app">
+      <foo></foo>
+      <bar></bar>
+
+      <foo></foo>
+      <bar></bar>
+
+      <foo></foo>
+      <bar></bar>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+    <script src="vue-component-css-mixin.js"></script>
+    <script>
+      Vue.use(VueComponentCSSMixin)
+
+      const DestroyableComponent = Vue.component("destroyable", {
+        methods: {
+          destroy: function () {
+            const self = this
+            self.$destroy()
+            self.$el.parentElement.removeChild(self.$el)
+          },
+        },
+
+        mounted: function () {
+          const self = this
+          const destroyButton = document.createElement("button")
+          destroyButton.innerText = "destroy!"
+          destroyButton.addEventListener("click", self.destroy)
+          self.$el.appendChild(destroyButton)
+        },
+      })
+
+      const FooComponent = Vue.component("foo", {
+        mixins: [DestroyableComponent],
+
+        template: `
+          <div class="foo">
+            This is foo!
+          </div>
+        `,
+
+        data: function () {
+          return {
+            css: `
+              .foo {
+                background-color: blue;
+                color: white;
+                padding: 1em;
+                margin-bottom: 1em;
+              }
+            `,
+          }
+        },
+      })
+
+      const BarComponent = Vue.component("bar", {
+        mixins: [DestroyableComponent],
+
+        template: `
+          <div class="bar">
+            This is bar!
+          </div>
+        `,
+
+        data: function () {
+          return {
+            css: `
+              .bar {
+                background-color: orange;
+                color: white;
+                padding: 1em;
+                margin-bottom: 1em;
+              }
+            `,
+          }
+        },
+      })
+
+      const app = new Vue({
+        el: "#app",
+      })
+    </script>
+  </body>
+</html>
