@@ -8,10 +8,10 @@ VueComponentCSSMixin = {
         const tagKey = self.$options.name + "-style-tag"
         const countKey = tagKey + "-count"
 
-        if (!dict.hasOwnProperty(countKey)) dict[countKey] = 0
-        dict[countKey]++
-
         if (self.css && !dict.hasOwnProperty(tagKey)) {
+          if (!dict.hasOwnProperty(countKey)) dict[countKey] = 0
+          dict[countKey]++
+
           const styleTag = document.createElement("style")
           dict[tagKey] = styleTag
           styleTag.innerHTML = self.css
@@ -23,6 +23,8 @@ VueComponentCSSMixin = {
         const self = this
         const tagKey = self.$options.name + "-style-tag"
         const countKey = tagKey + "-count"
+
+        if (!dict.hasOwnProperty(countKey)) return
 
         dict[countKey]--
 
