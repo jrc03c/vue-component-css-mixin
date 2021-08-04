@@ -8,14 +8,16 @@ VueComponentCSSMixin = {
         const tagKey = self.$options.name + "-style-tag"
         const countKey = tagKey + "-count"
 
-        if (self.css && !dict.hasOwnProperty(tagKey)) {
+        if (self.css) {
           if (!dict.hasOwnProperty(countKey)) dict[countKey] = 0
           dict[countKey]++
 
-          const styleTag = document.createElement("style")
-          dict[tagKey] = styleTag
-          styleTag.innerHTML = self.css
-          document.head.appendChild(styleTag)
+          if (!dict.hasOwnProperty(tagKey)) {
+            const styleTag = document.createElement("style")
+            dict[tagKey] = styleTag
+            styleTag.innerHTML = self.css
+            document.head.appendChild(styleTag)
+          }
         }
       },
 
@@ -24,14 +26,14 @@ VueComponentCSSMixin = {
         const tagKey = self.$options.name + "-style-tag"
         const countKey = tagKey + "-count"
 
-        if (!dict.hasOwnProperty(countKey)) return
+        if (self.css) {
+          dict[countKey]--
 
-        dict[countKey]--
-
-        if (dict[countKey] < 1) {
-          document.head.removeChild(dict[tagKey])
-          delete dict[tagKey]
-          delete dict[countKey]
+          if (dict[countKey] < 1) {
+            document.head.removeChild(dict[tagKey])
+            delete dict[tagKey]
+            delete dict[countKey]
+          }
         }
       },
     })
