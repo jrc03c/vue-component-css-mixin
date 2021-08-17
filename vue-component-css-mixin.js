@@ -30,9 +30,11 @@ VueComponentCSSMixin = {
           dict[countKey]--
 
           if (dict[countKey] < 1) {
-            document.head.removeChild(dict[tagKey])
-            delete dict[tagKey]
-            delete dict[countKey]
+            setTimeout(() => {
+              document.head.removeChild(dict[tagKey])
+              delete dict[tagKey]
+              delete dict[countKey]
+            }, self.cssRemovalDelay || 0)
           }
         }
       },
