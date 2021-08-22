@@ -6,14 +6,18 @@
   </head>
   <body>
     <div id="app">
-      <foo></foo>
-      <bar></bar>
+      <p>
+        <button @click="numberOfFoos++">
+          foo++
+        </button>
 
-      <foo></foo>
-      <bar></bar>
+        <button @click="numberOfBars++">
+          bar++
+        </button>
+      </p>
 
-      <foo></foo>
-      <bar></bar>
+      <foo v-for="i in times(numberOfFoos)" @destroyed="numberOfFoos--"></foo>
+      <bar v-for="i in times(numberOfBars)" @destroyed="numberOfBars--"></bar>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
@@ -22,11 +26,18 @@
       Vue.use(VueComponentCSSMixin)
 
       const DestroyableComponent = Vue.component("destroyable", {
+        data() {
+          return {
+            cssRemovalDelay: 3000,
+          }
+        },
+
         methods: {
           destroy: function () {
             const self = this
             self.$destroy()
             self.$el.parentElement.removeChild(self.$el)
+            self.$emit("destroyed")
           },
         },
 
@@ -87,6 +98,19 @@
 
       const app = new Vue({
         el: "#app",
+
+        data: {
+          numberOfFoos: 3,
+          numberOfBars: 3,
+        },
+
+        methods: {
+          times(n) {
+            const out = []
+            for (let i = 0; i < n; i++) out.push(i)
+            return out
+          },
+        },
       })
     </script>
   </body>

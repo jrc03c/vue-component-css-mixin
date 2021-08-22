@@ -31,6 +31,7 @@ VueComponentCSSMixin = {
 
           if (dict[countKey] < 1) {
             setTimeout(() => {
+              if (dict[countKey] > 0) return
               document.head.removeChild(dict[tagKey])
               delete dict[tagKey]
               delete dict[countKey]
